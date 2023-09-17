@@ -1,0 +1,21 @@
+<% if action_name == 'index' %>
+    <%= link_to "Home", root_path %> <br />
+<% end %>
+<% unless current_user.is_customer? %>
+    <% if action_name == 'index' %>
+        <%= link_to "New Product", new_product_path %> <br />
+    <% end %>
+    <% if action_name == 'show' || action_name == 'new'%>
+        <%= link_to "Go Back", products_path %> <br />
+        <% if action_name == 'show' %>
+            <%= link_to "Edit", edit_product_path(@product) %> <br />
+            <%= link_to "Destroy", product_path(@product), data: {
+                        turbo_method: :delete,
+                        turbo_confirm: "Are you sure?"
+                        } %> <br />
+            <% end %>
+    <% end %>
+    <% if action_name == 'edit' %>
+        <%= link_to "Cancel", product_path %> <br />
+    <% end %>
+<% end %>

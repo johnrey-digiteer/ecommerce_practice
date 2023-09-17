@@ -7,6 +7,7 @@
     <%= link_to "Log out", destroy_session_path(resource_name), data: {
                   turbo_method: :delete,
                   turbo_confirm: "Are you sure?"
-                } %> <br />
-    <%= current_user %> <br />
+                } %> 
+    <%= current_user.email %> <br />
+    <%= link_to "Product List", products_path %> <br />
 <% end %>

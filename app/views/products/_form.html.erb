@@ -1,0 +1,27 @@
+<%= form_with model: product do |form| %>
+  <%= render "products/error_messages", resource: product %>
+  <div>
+    <%= form.label :name %><br>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :description %><br>
+    <%= form.text_area :description %><br>
+  </div>
+
+  <div>
+    <%= form.label :quantity %><br>
+    <%= form.number_field :quantity, step: 1 %><br>
+  </div>
+
+  <div>
+    <%= form.label :base_price %><br>
+    <%= form.number_field  :base_price, step: 0.01 %><br>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+<%= render "products/links" %>

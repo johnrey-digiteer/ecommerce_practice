@@ -8,6 +8,10 @@ class User < ApplicationRecord
 
   before_save :set_defaults
 
+  def is_customer?
+    role == 'Customer'
+  end
+
   private
     def set_defaults
       self.role  ||= "Customer"
