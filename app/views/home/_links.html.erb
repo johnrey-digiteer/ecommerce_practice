@@ -1,0 +1,12 @@
+<% unless user_signed_in? %>
+    <%= link_to "Log in", new_session_path(resource_name) %><br />
+    <%- if devise_mapping.registerable?%>
+        <%= link_to "Sign up", new_registration_path(resource_name) %><br />
+    <% end %>
+<% else %>
+    <%= link_to "Log out", destroy_session_path(resource_name), data: {
+                  turbo_method: :delete,
+                  turbo_confirm: "Are you sure?"
+                } %> <br />
+    <%= current_user %> <br />
+<% end %>
