@@ -1,4 +1,6 @@
 module ApplicationHelper
+    include Pagy::Frontend
+    
     def devise_mapping
         @devise_mapping ||= Devise.mappings[:user]
     end
