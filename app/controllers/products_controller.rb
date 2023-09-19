@@ -1,23 +1,21 @@
 class ProductsController < ApplicationController
+  before_action :require_sign_in
+  before_action :require_admin, except: [:index, :show]
+
   def index
-    in_stock = if params[:in_stock].present?
-        params[:in_stock]
-    else
-        "In Stock"
-    end
     filtered = if params[:filter].present?
-      unless in_stock == "Out of Stock"
-        Product.where("LOWER(name) LIKE ? AND quantity > 0", "%#{params[:filter].downcase}%").all
+        unless params[:in_stock] == "false"
+          Product.where("LOWER(name) LIKE ? AND quantity > 0", "%#{params[:filter].downcase}%").all
+        else
+          Product.where("LOWER(name) LIKE ? AND quantity <= 0", "%#{params[:filter].downcase}%").all
+        end
       else
-        Product.where("LOWER(name) LIKE ? AND quantity <= 0", "%#{params[:filter].downcase}%").all
+        unless params[:in_stock] == "false"
+          Product.where("quantity > 0").all
+        else
+          Product.where("quantity <= 0").all
+        end
       end
-    else
-      unless in_stock == "Out of Stock"
-        Product.where("quantity > 0").all
-      else
-        Product.where("quantity <= 0").all
-      end
-    end
     @pagy, @products = pagy(filtered.all, items: 3)
   end
 
@@ -62,5 +60,19 @@ class ProductsController < ApplicationController
   private
     def product_params
       params.require(:product).permit(:name, :description, :quantity, :base_price)
+    end
+
+    def require_sign_in
+      unless user_signed_in?
+        flash[:notice] = "You must be logged in to access that section"
+        redirect_to new_user_session_path() # halts request cycle
+      end
+    end
+
+    def require_admin
+      if current_user.is_customer?
+        flash[:notice] = "You must be an Admin to access that section"
+        redirect_to products_path # halts request cycle
+      end
     end
 end

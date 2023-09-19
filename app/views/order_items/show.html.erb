@@ -1,0 +1,6 @@
+<h1>Product Name: <%= @order_item.product.name %></h1>
+
+<p> Quantity: <%= @order_item.quantity %> </p>
+<p> Total Price: <%= @order_item.quantity*@order_item.product.base_price %></p>
+
+<%= render "order_items/links" %>

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :order_items
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -8,12 +9,14 @@ class User < ApplicationRecord
 
   before_save :set_defaults
 
+  after_create :create_order
+
   def is_customer?
     role == 'Customer'
   end
 
   private
     def set_defaults
-      self.role  ||= "Customer"
+      role ||= "Customer"
     end
 end

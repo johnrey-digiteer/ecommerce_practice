@@ -5,4 +5,15 @@
 <p><%= @product.base_price %></p>
 
 <%= render "products/links" %>
+<h2>Add to cart:</h2>
+<%= form_with model: [ @product, @product.order_items.build ] do |form| %>
+  <%= render "products/error_messages", resource: @product.order_items.build %>
+  <p>
+    <%= form.label :quantity %><br>
+    <%= form.number_field :quantity, step: 1 %><br>
+  </p>
+  <p>
+    <%= form.submit "Add to cart"%>
+  </p>
+<% end %>
 

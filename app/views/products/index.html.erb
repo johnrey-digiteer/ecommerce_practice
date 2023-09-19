@@ -1,17 +1,15 @@
 <h1>Products#index</h1>
 <p>Find me in app/views/products/index.html.erb</p>
-<%= form_with url: products_path(), method: :get, data: { turbo_frame: "products", turbo_action: "advance" } do |form| %>
-  <%= form.text_field :filter, value: params[:filter], placeholder: "Filter"%>
-  <%= select_tag "in_stock", options_for_select([["In Stock", "In Stock"], ["Out of Stock", "Out of Stock"]], params[:in_stock]), onchange: "this.form.submit()" %>
+<%= form_with url: products_path(), method: :get, data: { turbo_frame: "products", turbo_action: "advance", controller: "form" } do |form| %>
+  <%= text_field_tag "filter", nil, placeholder: "Filter", data: {action: "input->form#submit" }%>
+  <%= select_tag "in_stock", options_for_select([["In Stock", "true"], ["Out of Stock", "false"]], params[:in_stock]), data: {action: "change->form#submit" }%>
 <% end %>
 
 <%= turbo_frame_tag "products" do%>
   <ul>
     <% @products.each do |product| %>
       <li>
-        <%= turbo_page_requires_reload %>
         <%= link_to product.name, product, data: {turbo_frame: "_top"} %>
-        <%= turbo_page_requires_reload %>
       </li>
     <% end %>
   </ul>
