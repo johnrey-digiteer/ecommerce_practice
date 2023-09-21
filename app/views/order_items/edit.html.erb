@@ -3,7 +3,7 @@
 <h2>Product Name: <%= @order_item.product.name %></h2>
 
 <%= form_with model: @order_item do |form| %>
-  <%= render "products/error_messages", resource: @order_item %>
+  <%= render "shared/error_messages", resource: @order_item %>
   <p>
     <%= form.label :quantity %><br>
     <%= form.number_field :quantity, step: 1 %><br>

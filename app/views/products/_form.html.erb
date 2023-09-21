@@ -1,5 +1,5 @@
 <%= form_with model: product do |form| %>
-  <%= render "products/error_messages", resource: product %>
+  <%= render "shared/error_messages", resource: product %>
   <div>
     <%= form.label :name %><br>
     <%= form.text_field :name %>

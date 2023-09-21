@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_19_071308) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_20_101744) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,7 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_071308) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "quantity"
-    t.boolean "purchased", default: false
+    t.integer "status"
     t.index ["product_id"], name: "index_order_items_on_product_id"
     t.index ["user_id"], name: "index_order_items_on_user_id"
   end
@@ -32,6 +32,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_071308) do
     t.float "base_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.text "body"
+    t.bigint "user_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "score"
+    t.string "reply"
+    t.index ["product_id"], name: "index_reviews_on_product_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -49,4 +61,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_071308) do
 
   add_foreign_key "order_items", "products"
   add_foreign_key "order_items", "users"
+  add_foreign_key "reviews", "products"
+  add_foreign_key "reviews", "users"
 end

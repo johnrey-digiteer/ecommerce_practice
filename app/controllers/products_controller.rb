@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :require_sign_in
+  before_action :authenticate_user!
   before_action :require_admin, except: [:index, :show]
 
   def index
@@ -21,6 +21,7 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find(params[:id])
+    @reviews = @product.reviews.includes(:user).all
   end
 
   def new
@@ -60,13 +61,6 @@ class ProductsController < ApplicationController
   private
     def product_params
       params.require(:product).permit(:name, :description, :quantity, :base_price)
-    end
-
-    def require_sign_in
-      unless user_signed_in?
-        flash[:notice] = "You must be logged in to access that section"
-        redirect_to new_user_session_path() # halts request cycle
-      end
     end
 
     def require_admin

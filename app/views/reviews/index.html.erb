@@ -1,0 +1,9 @@
+<h1>Wish List</h1>
+
+  <ul>
+    <% @wishes.each do |wish| %>
+      <li>
+        <%= link_to wish.product.name, product_path(wish.product.id) %>
+      </li>
+    <% end %>
+  </ul>
