@@ -1,0 +1,6 @@
+h1
+  | Wish List
+ul
+  - @wishes.each do |wish|
+    li
+      = link_to wish.product.name, product_path(wish.product.id)

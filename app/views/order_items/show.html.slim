@@ -1,0 +1,10 @@
+h1
+  | Product Name: 
+  = @order_item.product.name
+p
+  |  Quantity: 
+  = @order_item.quantity
+p
+  |  Total Price: 
+  = @order_item.quantity*@order_item.product.base_price
+= render "order_items/links"

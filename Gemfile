@@ -74,3 +74,7 @@ group :test do
   gem "selenium-webdriver"
 
 end
+
+gem "slim", "~> 5.1"
+
+gem "html2slim", github: "slim-template/html2slim"

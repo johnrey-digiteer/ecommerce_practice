@@ -1,0 +1,10 @@
+h1
+  | Purchases#show
+p
+  = @order_items.first.updated_at.strftime("%Y-%m-%d")
+ul
+  - @order_items.each do |order_item|
+    li
+      = link_to order_item.product.name, product_path(order_item.product.id)
+      = order_item.quantity
+      | x 

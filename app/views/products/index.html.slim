@@ -1,0 +1,14 @@
+h1
+  | Products#index
+p
+  | Find me in app/views/products/index.html.erb
+= form_with url: products_path(), method: :get, data: { turbo_frame: "products", turbo_action: "advance", controller: "form" } do |form|
+  = text_field_tag "filter", nil, placeholder: "Filter", data: {action: "input->form#submit" }
+  = select_tag "in_stock", options_for_select([["In Stock", "true"], ["Out of Stock", "false"]], params[:in_stock]), data: {action: "change->form#submit" }
+= turbo_frame_tag "products" do
+  ul
+    - @products.each do |product|
+      li
+        = link_to product.name, product, data: {turbo_frame: "_top"}
+  == pagy_nav(@pagy, link_extra: 'data-turbo-action="advance"')
+= render "products/links"

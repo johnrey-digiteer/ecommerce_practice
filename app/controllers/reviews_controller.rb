@@ -1,6 +1,6 @@
 class ReviewsController < ApplicationController
     before_action :authenticate_user!
-    before_action :require_admin
+    before_action :require_admin, except: :create
     def create
         @product = Product.find(params[:product_id])
         existing_review = Review.find_by(user_id: current_user.id, product_id: params[:product_id])

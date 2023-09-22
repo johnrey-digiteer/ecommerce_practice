@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/slim-template/html2slim.git
+  revision: 6a08e416e4cd0e1b0804bfda5a9296ff7371e549
+  specs:
+    html2slim (0.2.0)
+      hpricot
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -97,6 +104,7 @@ GEM
     erubi (1.12.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    hpricot (0.8.6)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.2.1)
@@ -190,6 +198,9 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    slim (5.1.1)
+      temple (~> 0.10.0)
+      tilt (>= 2.1.0)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -200,7 +211,9 @@ GEM
     stimulus-rails (1.2.2)
       railties (>= 6.0.0)
     stringio (3.0.8)
+    temple (0.10.2)
     thor (1.2.2)
+    tilt (2.3.0)
     timeout (0.4.0)
     turbo-rails (1.4.0)
       actionpack (>= 6.0.0)
@@ -231,6 +244,7 @@ DEPENDENCIES
   capybara
   debug
   devise
+  html2slim!
   importmap-rails
   jbuilder
   pagy
@@ -238,6 +252,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.8)
   selenium-webdriver
+  slim (~> 5.1)
   sprockets-rails
   stimulus-rails
   turbo-rails

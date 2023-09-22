@@ -1,0 +1,14 @@
+- if action_name == 'index'
+  = link_to "Home", root_path
+  br
+- if action_name == 'show'
+  = link_to "Go back", order_items_path
+  br
+  = link_to "Edit Quantity", edit_order_item_path(@order_item)
+  br
+  = link_to "Cancel Order", order_item_path(@order_item),
+                            data: { turbo_method: :delete,
+                            turbo_confirm: "Are you sure?" }
+  br
+- if action_name == 'edit'
+  = link_to "Cancel", order_item_path(@order_item)

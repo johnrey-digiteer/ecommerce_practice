@@ -1,0 +1,7 @@
+h1 Wishes#index
+p Find me in app/views/wishes/index.html.erb
+
+ul
+    - @wishes.each do |wish|
+        li 
+            = link_to wish.product.name, product_path(wish.product.id)

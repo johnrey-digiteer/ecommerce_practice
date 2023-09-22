@@ -1,0 +1,15 @@
+h1
+  | Edit Order
+h2
+  | Product Name: 
+  = @order_item.product.name
+= form_with model: @order_item do |form|
+  = render "shared/error_messages", resource: @order_item
+  p
+    = form.label :quantity
+  br
+  = form.number_field :quantity, step: 1
+  br
+  p
+    = form.submit "Update"
+= render "order_items/links"
