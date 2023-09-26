@@ -2,7 +2,7 @@ class PurchasesController < ApplicationController
   before_action :authenticate_user!
   before_action :require_customer
   def index
-    order_items_dates = OrderItem.where(user_id: current_user.id, status: "Purchased")
+    @order_items_dates = OrderItem.where(user_id: current_user.id, status: "Purchased")
                                   .distinct
                                   .pluck("DATE(updated_at)")
     # @pagy, @order_items_dates = pagy(order_items_dates, items: 1)
