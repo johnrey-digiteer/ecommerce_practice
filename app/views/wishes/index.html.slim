@@ -1,7 +1,13 @@
 h1 Wishes#index
 p Find me in app/views/wishes/index.html.erb
 
-ul
-    - @wishes.each do |wish|
-        li 
-            = link_to wish.product.name, product_path(wish.product.id)
+= turbo_frame_tag "wishes" do
+    ul
+        - @wishes.each do |wish|
+            li 
+                = link_to wish.product.name, product_path(wish.product.id), data: {turbo_frame: "_top"}
+                =< link_to "Delete", wish_path(wish),
+                                data: {turbo_method: :delete,
+                                turbo_confirm: "Are you sure?",
+                                turbo_frame: "_top" }
+    == pagy_nav(@pagy, link_extra: 'data-turbo-action="advance"')

@@ -16,8 +16,11 @@ class OrderItem < ApplicationRecord
     end
 
     def validate_unique_user_product_status_combination
-      if user.present? && product.present? && OrderItem.where(user_id: user.id, product_id: product.id, status: status).where.not(id: id).exists?
-        errors.add(:base, "An order item with the same user, product and status already exists")
+      if user.present? && product.present? &&
+        OrderItem.where(user_id: user.id, product_id: product.id, status: "Wished").where.not(id: id).exists?
+        errors.add(:base, "An order item with the same user, product in wishes already exists")
       end
     end
+    
+    
 end

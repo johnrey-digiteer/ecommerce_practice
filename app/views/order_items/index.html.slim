@@ -6,7 +6,7 @@ ul
   - @order_items.each do |order_item|
     li
       = link_to order_item.product.name, order_item_path(order_item)
-      = order_item.quantity
+      =< order_item.quantity
       | x 
 = form_with(url: checkout_order_items_path, method: :post) do |form|
   = form.submit "Checkout"

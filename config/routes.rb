@@ -32,6 +32,6 @@ Rails.application.routes.draw do
   end
 
   resources :purchases, only: [:index, :show]
-  resources :wishes,  only: [:index, :show]
+  resources :wishes,  only: [:index, :show, :destroy]
 
 end

@@ -1,7 +1,7 @@
 class OrderItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_customer, except: [:index, :show]
-  before_action :quantity_validation, only: :create
+  # before_action :quantity_validation, only: :create
   def index
     @order_items = OrderItem.where(user_id: current_user.id, status: "Ordered").includes(:product).all
   end
@@ -10,49 +10,67 @@ class OrderItemsController < ApplicationController
     @order_item = OrderItem.includes(:product).find(params[:id])
   end
 
-  def create
-    @product = Product.find(params[:product_id])
-    @order_item = @product.order_items.create(user_id: current_user.id, product_id: params[:product_id], quantity: order_item_param_quantity[:quantity], status: "Ordered")
-    @wished = @product.order_items.find_by(user_id: current_user.id, product_id: params[:product_id], status: "Wished")
+def create
+  @product = Product.find(params[:product_id])
+
+  if order_item_param_quantity[:quantity].present?
+    @ordered = @product.order_items.find_by(user_id: current_user.id, product_id: params[:product_id], status: "Ordered")
+
+    wished = @product.order_items.find_by(user_id: current_user.id, product_id: params[:product_id], status: "Wished")
     
-    if @wished.present?
-      if @wished.update(quantity: order_item_param_quantity[:quantity], status: "Ordered")
-        redirect_to order_items_path
-      else
-        @reviews = @product.reviews.includes(:user).all
-        render "products/show", status: :unprocessable_entity
-      end
-    else
-      if @order_item.save
-        redirect_to order_items_path
-      else
-        @reviews = @product.reviews.includes(:user).all
-        render "products/show", status: :unprocessable_entity
-      end
+    
+    if wished.present?
+      wished.destroy
     end
+
+    if @ordered.present?
+      item = @ordered.update(quantity: @ordered.quantity + order_item_param_quantity[:quantity].to_i)
+    else
+      @order_item = @product.order_items.create(user_id: current_user.id, product_id: params[:product_id], quantity: order_item_param_quantity[:quantity], status: "Ordered")
+      item = @order_item.persisted?
+    end
+
+    if item
+      redirect_to order_items_path
+    else
+      @reviews = @product.reviews.includes(:user).all
+      render "products/show", status: :unprocessable_entity
+    end
+
+  else
+    @order_item = @product.order_items.build(
+      user_id: current_user.id,
+      product_id: params[:product_id],
+      quantity: nil, # You can set quantity to nil or any default value you prefer.
+      status: "Ordered"
+    )
+    @order_item.errors.add(:quantity, "Quantity can't be nil")
+    @reviews = @product.reviews.includes(:user).all
+    debugger
+    render "products/show", status: :unprocessable_entity
+  end
+end
+
+def wishlist
+  @product = Product.find(params[:id])
+
+  ordered = @product.order_items.find_by(user_id: current_user.id, product_id: @product.id, status: "Ordered")
+  
+  if ordered.present?
+    ordered.destroy
   end
 
-  def wishlist
-    @product = Product.find(params[:id])
-    @order_item = @product.order_items.create(user_id: current_user.id, product_id: params[:product_id], status: "Wished")
-    @ordered = @product.order_items.find_by(user_id: current_user.id, product_id: params[:product_id], status: "Ordered")
-  
-    if @ordered.present?
-      if @ordered.update(quantity: nil, status: "Wished")
-        redirect_to wishes_path
-      else
-        @reviews = @product.reviews.includes(:user).all
-        render "products/show", status: :unprocessable_entity
-      end
-    else
-      if @order_item.save
-        redirect_to wishes_path
-      else
-        @reviews = @product.reviews.includes(:user).all
-        render "products/show", status: :unprocessable_entity
-      end
-    end
+  @order_item = @product.order_items.create(user_id: current_user.id, product_id: params[:product_id], status: "Wished")
+  item = @order_item.persisted?
+
+  if item
+    redirect_to wishes_path
+  else
+    @reviews = @product.reviews.includes(:user).all
+    render "products/show", status: :unprocessable_entity
   end
+end
+
 
   def checkout
     @order_items = OrderItem.where(user_id: current_user.id, status: "Ordered").includes(:product).all
@@ -99,13 +117,6 @@ class OrderItemsController < ApplicationController
     def require_customer
       unless current_user.is_customer?
         flash[:notice] = "You must be a Customer to access that section"
-        redirect_to products_path # halts request cycle
-      end
-    end
-
-    def quantity_validation
-      if order_item_param_quantity.present?
-        flash[:notice] = "Quantity can't be nil"
         redirect_to products_path # halts request cycle
       end
     end

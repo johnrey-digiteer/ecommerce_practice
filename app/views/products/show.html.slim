@@ -9,6 +9,7 @@ p
 = render "products/links"
 - if current_user.is_customer?
   = form_with(url: wishlist_order_item_path(@product.id), method: :post) do |form|
+    = render "shared/error_messages", resource: @order_item if @order_item.present?
     p
       = form.hidden_field :quantity, value: 1
       br

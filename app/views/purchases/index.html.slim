@@ -2,6 +2,8 @@ h1
   | Purchases#index
 p
   | Find me in app/views/purchases/index.html.erb
-- @order_items_dates.each do |order_item_date|
-  li
-    = link_to order_item_date, purchase_path(order_item_date)
+- if @order_items_dates.present?
+  - @order_items_dates.each do |order_item_date|
+    li
+      = link_to order_item_date, purchase_path(order_item_date)
+/ == pagy_nav(@pagy, link_extra: 'data-turbo-action="advance"')
