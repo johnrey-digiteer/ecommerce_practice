@@ -1,3 +1,5 @@
 h1
   | Edit Product
-= render "form", product: @product
+= turbo_frame_tag "modal" do
+  div data-controller="turbo-modal" data-action="turbo:submit-end->turbo-modal#submitEnd"
+    = render "form", product: @product

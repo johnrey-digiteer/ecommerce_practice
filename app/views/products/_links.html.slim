@@ -6,11 +6,12 @@
     br
 - unless current_user.is_customer?
     - if action_name == "index"
-        = link_to "New Product", new_product_path
+        / = link_to "New Product", new_product_path
+        = link_to "New Product", new_product_path, data: { turbo_frame: 'modal' }
         br
     - if action_name == 'show' || action_name == 'new'
         - if action_name == 'show'
-            = link_to "Edit", edit_product_path(@product)
+            = link_to "Edit", edit_product_path(@product), data: { turbo_frame: 'modal' }
             br
             = link_to "Destroy", product_path(@product),
                                 data: {turbo_method: :delete,

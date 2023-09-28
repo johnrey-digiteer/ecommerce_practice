@@ -1,28 +1,56 @@
 class ReviewsController < ApplicationController
     before_action :authenticate_user!
-    before_action :require_admin, except: :create
+    # before_action :require_admin, except: :create
+
+    def new
+      @product = Product.find(params[:product_id])
+    end
+  
+
     def create
         @product = Product.find(params[:product_id])
-        existing_review = Review.find_by(user_id: current_user.id, product_id: params[:product_id])
+        # existing_review = Review.find_by(user_id: current_user.id, product_id: params[:product_id])
 
-        if existing_review.present?
-            flash[:notice] = "You already reviewed the product"
-            redirect_to product_path(@product) # halts request cycle
+        # if existing_review.present?
+        #     flash[:notice] = "You already reviewed the product"
+        #     redirect_to product_path(@product) # halts request cycle
+        # else
+        #     @review = @product.reviews.create( user_id: current_user.id, product_id:params[:product_id], body: review_params[:body], score: review_params[:score] )
+        #     redirect_to product_path(@product)
+        # end
+      @review = @product.reviews.new( user_id: current_user.id, product_id:params[:product_id], body: review_params[:body], score: review_params[:score] )
+
+      respond_to do |format|
+        if @review.save
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.append("reviews",
+              partial: "reviews/review",
+              locals: { review: @review })
+          end
+          format.html { redirect_to product_path(@product), notice: "Review was successfully created." }
         else
-            @review = @product.reviews.create( user_id: current_user.id, product_id:params[:product_id], body: review_params[:body], score: review_params[:score] )
-            redirect_to product_path(@product)
+          format.html { render "products/show", status: :unprocessable_entity }
         end
+      end
+
     end 
 
     def update
-        @product = Product.find(params[:product_id])
-        @review = @product.reviews.find(params[:id])
+      @product = Product.find(params[:product_id])
+      @review = @product.reviews.find(params[:id])
+      respond_to do |format|
         if @review.update(review_params)
-          redirect_to product_path(@product)
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace(@review,
+              partial: "reviews/review",
+              locals: { review: @review })
+          end
+          format.html { redirect_to product_path(@product), notice: "Review was successfully updated." }
         else
-          render :edit, status: :unprocessable_entity
+          format.html { render "products/show", status: :unprocessable_entity }
         end
       end
+    end
     
     private
         def review_params

@@ -1,11 +1,5 @@
-h1
-  = @product.name
-p
-  = @product.description
-p
-  = @product.quantity
-p
-  = @product.base_price
+div id="product"
+  =render "product", product: @product
 = render "products/links"
 - if current_user.is_customer?
   = form_with(url: wishlist_order_item_path(@product.id), method: :post) do |form|
@@ -25,39 +19,30 @@ p
       br
     p
       = form.submit "Add to cart"
-  = form_with model: [ @product, @product.reviews.build ] do |form|
-    h2
-      | Add Review:
-    p
-      = form.label :score
-      br
-      = form.number_field :score, step: 0.1
-    p
-      = form.label :body
-      br
-      = form.text_area :body
-    p
-      = form.submit
+  = link_to "Add Review", new_product_review_path(@product), data: { turbo_frame: 'modal' }
 h2
   | Reviews
-- @reviews.each do |review|
-  p
-    strong
-      | Email:
-    = review.user.email
-    strong
-      | Score:
-    = review.score
-    strong
-      | Review:
-    = review.body
-  - if review.reply.present?
-    strong
-      | Reply:
-    = review.reply
-  - elsif not current_user.is_customer?
-    = form_with(model: review, url: product_review_path(product_id: @product.id, id: review.id), method: :patch) do |form|
-      div
-        = form.label :reply
-        br
-        = form.text_field :reply
+div id="reviews"
+  = render @reviews
+
+/ - @reviews.each do |review|
+/   p
+/     strong
+/       | Email:
+/     = review.user.email
+/     strong
+/       | Score:
+/     = review.score
+/     strong
+/       | Review:
+/     = review.body
+/   - if review.reply.present?
+/     strong
+/       | Reply:
+/     = review.reply
+/   - if not current_user.is_customer?
+/     = form_with(model: review, url: product_review_path(product_id: @product.id, id: review.id), method: :patch) do |form|
+/       div
+/         = form.label :reply
+/         br
+/         = form.text_field :reply

@@ -33,6 +33,14 @@ class ProductsController < ApplicationController
     if @product.save
       redirect_to @product
     else
+      # respond_to do |format|
+      #   format.turbo_stream do
+      #     render turbo_stream: turbo_stream.update("new_product",
+      #       partial: "products/form",
+      #       locals: { product: @product })
+      #   end
+      #   format.html { render :new, status: :unprocessable_entity }
+      # end
       render :new, status: :unprocessable_entity
     end
   end
@@ -43,11 +51,17 @@ class ProductsController < ApplicationController
 
   def update
     @product = Product.find(params[:id])
-
-    if @product.update(product_params)
-      redirect_to @product
-    else
-      render :edit, status: :unprocessable_entity
+    respond_to do |format|
+      if @product.update(product_params)
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.update("product",
+            partial: "products/product",
+            locals: { product: @product })
+        end
+        format.html { redirect_to @product }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+      end
     end
   end
 

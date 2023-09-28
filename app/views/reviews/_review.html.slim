@@ -1,0 +1,26 @@
+div id=dom_id(review)
+	p
+		strong
+			| Email:
+		=< review.user.email
+		br
+		strong
+			| Score:
+		=< review.score
+		br
+		strong
+			| Review:
+		=< review.body
+		br
+		- if review.reply.present?
+			strong
+				| Admin Reply:
+			=< review.reply
+	- if not current_user.is_customer?
+		div id="reply"
+			= render "reviews/reply", review: review
+		/ = form_with(model: review, url: product_review_path(product_id: review.product_id, id: review.id), method: :patch) do |form|
+		/ 	div
+		/ 		= form.label :reply
+		/ 		br
+		/ 		= form.text_field :reply
