@@ -2,17 +2,18 @@ class PurchasesController < ApplicationController
   before_action :authenticate_user!
   before_action :require_customer
   def index
-    @order_items_dates = OrderItem.where(user_id: current_user.id, status: "Purchased")
-                                  .distinct
-                                  .pluck("DATE(updated_at)")
-    # @pagy, @order_items_dates = pagy(order_items_dates, items: 1)
+    query = OrderItem.where(user_id: current_user.id, status: "Purchased")
+                    .select("DISTINCT ON (DATE(updated_at)) *")
+                    .order("DATE(updated_at), created_at DESC")
+    @pagy, @order_items_dates = pagy(query, items: 1)
   end
   
 
   def show
-    @order_items = OrderItem.where("DATE(updated_at) IN (?)", params[:id])
+    order_items = OrderItem.where("DATE(updated_at) IN (?)", params[:id])
                           .includes(:product)
                           .all
+    @pagy, @order_items = pagy(order_items, items: 1)
   end
   
   private

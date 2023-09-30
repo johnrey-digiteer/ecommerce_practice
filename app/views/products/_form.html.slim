@@ -1,24 +1,37 @@
-= form_with model: product do |form|
-  = render "shared/error_messages", resource: product
-  div
-    = form.label :name
-    br
-    = form.text_field :name
-  div
-    = form.label :description
-    br
-    = form.text_area :description
-    br
-  div
-    = form.label :quantity
-    br
-    = form.number_field :quantity, step: 1
-    br
-  div
-    = form.label :base_price
-    br
-    = form.number_field  :base_price, step: 0.01
-    br
-  div
-    = form.submit
-= render "products/links"
+div data-controller="turbo-modal" data-action="turbo:submit-end->turbo-modal#submitEnd"
+  = form_with model: product do |form|
+    = render "shared/error_messages", resource: product
+    div
+      = form.label :name
+      br
+      = form.text_field :name
+    div
+      = form.label :description
+      br
+      = form.text_area :description
+      br
+    div
+      = form.label :quantity
+      br
+      = form.number_field :quantity, step: 1
+      br
+    div
+      = form.label :base_price
+      br
+      = form.number_field  :base_price, step: 0.01
+      br
+
+    div data-controller="nested-form"
+      template data-nested-form-target='template'
+        = form.fields_for :variants, Variant.new, child_index: 'TEMPLATE_RECORD' do |variant|
+          = render 'variant_fields', form: variant
+
+      = form.fields_for :variants do |variant|
+        = render 'variant_fields', form: variant
+
+      div data-nested-form-target="add_item"
+        = link_to "Add Variant", "#", data: { action: "nested-form#add_association" }
+
+      div
+        = form.submit
+  = render "products/links"

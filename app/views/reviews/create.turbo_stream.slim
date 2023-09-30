@@ -1,0 +1,6 @@
+- unless @review.errors.any?
+	= turbo_stream.append "reviews" do
+		= render partial: "reviews/review", locals: { review: @review }
+- else
+	= turbo_stream.update "modal" do
+		= render partial: "reviews/form", locals: { product: @product }

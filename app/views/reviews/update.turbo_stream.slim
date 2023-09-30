@@ -1,0 +1,3 @@
+- unless @review.errors.any?
+	= turbo_stream.replace @review do
+		= render partial: "reviews/review", locals: { review: @review }

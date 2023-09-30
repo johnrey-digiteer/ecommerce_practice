@@ -22,8 +22,12 @@ div id="product"
   = link_to "Add Review", new_product_review_path(@product), data: { turbo_frame: 'modal' }
 h2
   | Reviews
+
+/ div id="reviews"
+/   = render @reviews
 div id="reviews"
-  = render @reviews
+  - @product.reviews.each do |review|
+    = render "reviews/review", review: review
 
 / - @reviews.each do |review|
 /   p

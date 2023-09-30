@@ -4,11 +4,23 @@ p
   | Find me in app/views/products/index.html.erb
 = form_with url: products_path(), method: :get, data: { turbo_frame: "products", turbo_action: "advance", controller: "form" } do |form|
   = text_field_tag "filter", nil, placeholder: "Filter", data: {action: "input->form#submit" }
-  = select_tag "in_stock", options_for_select([["In Stock", "true"], ["Out of Stock", "false"]], params[:in_stock]), data: {action: "change->form#submit" }
+  = select_tag "in_stock", options_for_select([["All", "none"], ["In Stock", "true"], ["Out of Stock", "false"]], params[:in_stock]), data: {action: "change->form#submit" }
+  = select_tag "sort_by", options_for_select([["Select Order", "none"],
+                                              ["Name (Ascending)", "name_asc"],
+                                              ["Name (Descending)", "name_desc"],
+                                              ["Quantity (Ascending)", "quantity_asc"],
+                                              ["Quantity (Descending)", "quantity_desc"],
+                                              ["Price (Ascending)", "price_asc"],
+                                              ["Price (Descending)", "price_desc"]],
+                                              params[:sort_by]), data: { action: "change->form#submit" }
+
 = turbo_frame_tag "products" do
-  ul
-    - @products.each do |product|
-      li
-        = link_to product.name, product, data: {turbo_frame: "_top"}
-  == pagy_nav(@pagy, link_extra: 'data-turbo-action="advance"')
+  div id="product_list"
+    / ul
+    /   - @products.each do |product|
+    /     div id=dom_id(product)
+    /       li
+    /         = link_to product.name, product, data: {turbo_frame: "_top"}
+    = render partial: "products/index_product", collection: @products, as: :product
+    == pagy_nav(@pagy, link_extra: 'data-turbo-action="advance"')
 = render "products/links"

@@ -1,0 +1,6 @@
+- unless @product.errors.any?
+  = turbo_stream.prepend "product_list" do
+    = render partial: "products/index_product", locals: { product: @product }
+- else
+  = turbo_stream.update "modal" do
+    = render partial: "products/form", locals: { product: @product }

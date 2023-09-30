@@ -1,15 +1,16 @@
-= form_with model: [product, product.reviews.build], url: product_reviews_path(product) do |form|
-	= render "shared/error_messages", resource: @review if @review.present?
-	h2
-		| Add Review:
-	p
-		= form.label :score
-		br
-		= form.number_field :score, step: 0.1
-	p
-		= form.label :body
-		br
-		= form.text_area :body
-	p
-		= form.submit
+div data-controller="turbo-modal" data-action="turbo:submit-end->turbo-modal#submitEnd"
+	= form_with model: [product, product.reviews.build], url: product_reviews_path(product) do |form|
+		= render "shared/error_messages", resource: @review if @review.present?
+		h2
+			| Add Review:
+		p
+			= form.label :score
+			br
+			= form.number_field :score, step: 0.1
+		p
+			= form.label :body
+			br
+			= form.text_area :body
+		p
+			= form.submit
 

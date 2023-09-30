@@ -1,8 +1,12 @@
-h1
-  = @product.name
-p
-  = @product.description
-p
-  = @product.quantity
-p
-  = @product.base_price
+div id=dom_id(@product)
+  h1
+    = @product.name
+  p
+    = @product.description
+  p
+    = @product.quantity
+  p
+    = @product.base_price
+  div id="variants"
+    - @product.variants.each do |variant|
+      = render "products/variant", variant: variant

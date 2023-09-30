@@ -1,0 +1,8 @@
+.nested-fields
+  .form-group
+    = form.hidden_field :_destroy
+    = form.text_field :name, placeholder: 'Name', class: 'form-control'
+    = form.text_field :color, placeholder: 'Color', class: 'form-control'
+    = form.number_field :size, placeholder: 'Size', class: 'form-control'
+    small
+      = link_to "Remove Variant", "#", data: { action: "click->nested-form#remove_association" }
