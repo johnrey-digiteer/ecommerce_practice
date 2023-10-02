@@ -76,6 +76,24 @@ class ProductsController < ApplicationController
 
   private
 
+  # def product_params
+  #   params.require(:product).permit(:name, :description, :quantity, :base_price,
+  #                                   variants_attributes: [
+  #                                     :_destroy,
+  #                                     :id,
+  #                                     :name,
+  #                                     :color,
+  #                                     :size,
+  #                                     :type,
+  #                                     options_attributes: [
+  #                                       :_destroy,
+  #                                       :id,
+  #                                       :name,
+  #                                       :cost
+  #                                     ]
+  #                                   ])
+  # end
+
   def product_params
     params.require(:product).permit(:name, :description, :quantity, :base_price,
                                     variants_attributes: [
@@ -83,9 +101,11 @@ class ProductsController < ApplicationController
                                       :id,
                                       :name,
                                       :color,
-                                      :size
+                                      :size,
+                                      :type
                                     ])
   end
+
 
   def require_admin
     if current_user.is_customer?

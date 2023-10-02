@@ -1,0 +1,7 @@
+.nested-fields
+  .form-group
+    = form.hidden_field :_destroy
+    = form.text_field :name, placeholder: 'Option Name', class: 'form-control'
+    = form.number_field :cost, placeholder: 'Cost', class: 'form-control'
+    small
+      = link_to "Remove Option", "#", data: { action: "click->nested-form#remove_association" }

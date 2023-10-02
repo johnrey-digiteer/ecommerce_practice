@@ -2,7 +2,7 @@ class OrderItem < ApplicationRecord
   belongs_to :user
   belongs_to :product
 
-  enum status: { "Wished" => 0, "Ordered" => 1, "Purchased" => 2 }
+  enum status: { Wished: 0, Ordered: 1, Purchased: 2 }
 
   # validates :quantity, presence: true
   validate :validate_quantity_less_than_product_quantity
@@ -21,6 +21,5 @@ class OrderItem < ApplicationRecord
         errors.add(:base, "An order item with the same user, product in wishes already exists")
       end
     end
-    
-    
 end
+

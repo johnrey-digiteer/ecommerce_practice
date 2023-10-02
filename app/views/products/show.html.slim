@@ -28,25 +28,3 @@ h2
 div id="reviews"
   - @product.reviews.each do |review|
     = render "reviews/review", review: review
-
-/ - @reviews.each do |review|
-/   p
-/     strong
-/       | Email:
-/     = review.user.email
-/     strong
-/       | Score:
-/     = review.score
-/     strong
-/       | Review:
-/     = review.body
-/   - if review.reply.present?
-/     strong
-/       | Reply:
-/     = review.reply
-/   - if not current_user.is_customer?
-/     = form_with(model: review, url: product_review_path(product_id: @product.id, id: review.id), method: :patch) do |form|
-/       div
-/         = form.label :reply
-/         br
-/         = form.text_field :reply
